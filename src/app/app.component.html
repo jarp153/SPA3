@@ -1,0 +1,15 @@
+<app-header (toggleSidenav)="sidenav.toggle()"></app-header>
+<app-navbar></app-navbar>
+
+<mat-sidenav-container>
+    <mat-sidenav #sidenav mode="push">
+        <app-sidebar (toggleSidenav)="sidenav.toggle()"></app-sidebar>
+    </mat-sidenav>
+
+    <mat-sidenav-content style="padding-left: 15px; padding-right: 15px;">
+        <div style="height: 88vh;">
+            <div class="col-sm-12" style="padding:6px;"></div>
+            <router-outlet></router-outlet>
+        </div>
+    </mat-sidenav-content>
+</mat-sidenav-container>
