@@ -42,8 +42,7 @@
                         <mat-form-field appearance="fill" style="width: 100%;"> 
                             <mat-label>Estado civil</mat-label>
                             <select matNativeControl required style=" font-size: 30px;" id="Estado_Civil" formControlName="Estado_Civil">
-                              <option value="0">SOLTERO</option>
-                              <option value="1">CASADO</option>
+                                <option *ngFor="let estado of estados_civiles" [value]="estado.value">{{ estado.text }}</option>
                             </select>
                           </mat-form-field>
                     </div>
@@ -51,8 +50,7 @@
                         <mat-form-field appearance="fill" style="width: 100%;"> 
                             <mat-label>Tiene Hermanos</mat-label>
                             <select matNativeControl required style=" font-size: 30px;" id="Tiene_Hermanos" formControlName="Tiene_Hermanos">
-                              <option value="1">SI</option>
-                              <option value="0">NO</option>
+                                <option *ngFor="let hermanos of tiene_hermanos" [value]="hermanos.value">{{ hermanos.text }}</option>
                             </select>
                           </mat-form-field>
                     </div>

@@ -14,17 +14,30 @@ import { ToolsService } from 'src/app/services/tools.service';
   styleUrls: ['./detalle.component.css']
 })
 export class DetalleComponent implements OnInit {
-  forma!: FormGroup;
+  //forma!: FormGroup;
   usuario!: IUsuarioModel;
-  tiene_hermanos: string = 'NO';
+  //tiene_hermanos: string = 'NO';
   fecha_nacimiento!: string;
   cod_usuario: number = 0;
   error: boolean = false;
   mensaje: string = '';
+
+  public readonly estados_civiles = [{value: 1, text: 'CASADO' }, {value: 0, text: 'SOLTERO' } ];
+  public readonly tiene_hermanos = [{value: 1, text: 'SI' }, {value: 0, text: 'NO' } ];
   
   public archivo: Archivo | undefined;
   public imagenSubir: File | undefined;
   public imgTemp: any = null;
+
+  public readonly forma: FormGroup = new FormGroup({
+    Cod_Usuario: new FormControl(null),
+    Nombre: new FormControl(null, [Validators.required]),
+    Apellido: new FormControl(null, [Validators.required]),
+    Fecha_Nacimiento: new FormControl(new Date(), [Validators.required]),
+    Foto: new FormControl(null, [Validators.required]),
+    Estado_Civil: new FormControl(null, [Validators.required]), 
+    Tiene_Hermanos: new FormControl(null, [Validators.required]),
+  });
   
   constructor(private readonly router: ActivatedRoute, 
               private readonly spaService: SpaService, 
@@ -32,42 +45,27 @@ export class DetalleComponent implements OnInit {
               private readonly routerb: Router, 
               public tools: ToolsService) { 
 
-      this.loadForm();
-
       this.router.params.subscribe(params => {
         this.detalleUsuario(params['id']);
         })
     }
 
-    private loadForm():void{
-      this.forma = this.fb.group({
-        Cod_Usuario : [''],
-        Nombre : ['', Validators.required],
-        Apellido : ['', Validators.required],
-        Fecha_Nacimiento: [new Date(), Validators.required],
-        Foto: [''],
-        Estado_Civil: ['', Validators.required],
-        Tiene_Hermanos: ['', Validators.required],
-        })
-
-    }
     ngOnInit(): void {
     }
 
     detalleUsuario(id: number){
-      this.spaService.detailUser(id).subscribe( (res:any) => {
-        this.usuario = res;
+      this.spaService.detailUser(id).subscribe( (res:IUsuarioModel) => {
         this.cod_usuario=res.Cod_Usuario;
-        this.tools.asignarNombreOpcion('Detalle usuario ' + this.usuario.Nombre);
+        this.tools.asignarNombreOpcion('Detalle usuario ' + res.Nombre);
 
-        this.forma.patchValue({
-          Cod_Usuario: this.usuario.Cod_Usuario,
-          Nombre: this.usuario.Nombre,
-          Apellido: this.usuario.Apellido,
-          Fecha_Nacimiento: this.usuario.Fecha_Nacimiento,
-          Foto: this.usuario.Foto,
-          Estado_Civil: this.usuario.Estado_Civil,
-          Tiene_Hermanos: this.usuario.Tiene_Hermanos,
+        this.forma.setValue({
+          Cod_Usuario: res.Cod_Usuario,
+          Nombre: res.Nombre,
+          Apellido: res.Apellido,
+          Fecha_Nacimiento: res.Fecha_Nacimiento,
+          Foto: res.Foto,
+          Estado_Civil: res.Estado_Civil,
+          Tiene_Hermanos: res.Tiene_Hermanos,
         }) 
      })
     }
@@ -94,7 +92,7 @@ export class DetalleComponent implements OnInit {
     }
   }
 
-  fileEvent(fileInput: Event){
+  /*fileEvent(fileInput: Event){
     const element = fileInput.currentTarget as HTMLInputElement;
     let fileList: FileList | null = element.files;
     
@@ -112,10 +110,10 @@ export class DetalleComponent implements OnInit {
     this.spaService.subirArchivo(this.archivo).subscribe(res=>{
       console.log('archivo')
     })
-  }
+  }*/
 
   regresar(): void{
-    this.routerb.navigate(['admin/ingresar']);
+    this.routerb.navigate(['admin/usuarios']);
   }
 
 }

@@ -28,10 +28,9 @@
                         <mat-form-field class="full-width">
                             <input matInput formControlName="Foto" id="Foto" placeholder="Foto:">
                         </mat-form-field>
-                        <input type="file" formControlName="Foto" id="Foto" (change)="fileEvent($event)">
+                        <!-- <input type="file" formControlName="Foto" id="Foto" (change)="fileEvent($event)"> -->
                         <!-- <input type="button" value="Cargar" (click)="subirArchivo()"> -->
                     </div>
-
                     <div class="col-sm-2">
                         <!-- <img *ngIf="!imgTemp" [src]="modalImagenService.img" class="img-avatar"> -->
                         <img *ngIf="imgTemp" [src]="imgTemp" class="img-avatar" width="80" height="80">
@@ -42,8 +41,7 @@
                         <mat-form-field appearance="fill" style="width: 100%;"> 
                             <mat-label>Estado civil</mat-label>
                             <select matNativeControl required style=" font-size: 30px;" id="Estado_Civil" formControlName="Estado_Civil">
-                              <option value="0">SOLTERO</option>
-                              <option value="1">CASADO</option>
+                                <option *ngFor="let estado of estados_civiles" [value]="estado.value">{{ estado.text }}</option>
                             </select>
                           </mat-form-field>
                     </div>
@@ -51,8 +49,7 @@
                         <mat-form-field appearance="fill" style="width: 100%;"> 
                             <mat-label>Tiene Hermanos</mat-label>
                             <select matNativeControl required style=" font-size: 30px;" id="Tiene_Hermanos" formControlName="Tiene_Hermanos">
-                              <option value="1">SI</option>
-                              <option value="0">NO</option>
+                                <option *ngFor="let hermanos of tiene_hermanos" [value]="hermanos.value">{{ hermanos.text }}</option>
                             </select>
                           </mat-form-field>
                     </div>

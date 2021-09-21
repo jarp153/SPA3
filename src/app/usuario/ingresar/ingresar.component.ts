@@ -20,6 +20,9 @@ export class IngresarComponent implements OnInit {
   public imagenSubir: File | undefined;
   public imgTemp: any = null;
 
+  public readonly estados_civiles = [{value: 1, text: 'CASADO' }, {value: 0, text: 'SOLTERO' } ];
+  public readonly tiene_hermanos = [{value: 1, text: 'SI' }, {value: 0, text: 'NO' } ];
+
   constructor(
     private router: ActivatedRoute, 
     private readonly spaService: SpaService, 
@@ -44,26 +47,23 @@ export class IngresarComponent implements OnInit {
     this.tools.asignarNombreOpcion('Ingresar usuario')
   }
 
-  insertUser(){
+  insertUser():  void{
     if (this.forma.invalid) {
       this.error=true;
       this.mensaje = 'Debe diligenciar todos los datos...'
-      return false;
     }
     else{
       const user = this.forma.value as IUsuarioModel;
 
       this.spaService.insertUser(user).subscribe(res=>{
         alert('Usuario ingresado');
+        this.routerb.navigate(['admin/usuarios']);
       },
       err=>{
         this.error=true;
-        return false;
+
       }
       )
-      this.routerb.navigate(['admin/usuarios']);
-      return true;
-      
     }
   }
 

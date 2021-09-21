@@ -28,7 +28,7 @@ export class UsuariosComponent implements OnInit {
       this.usuarios = res;
      },
     err =>{
-      alert('Error en la comunicacion')
+      alert('Error en la comunicacion con la API')
       this.error = true;
     })
   }
