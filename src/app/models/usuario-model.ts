@@ -1,8 +1,9 @@
-export interface UsuarioModel {
-    Cod_Uusario : number;
+export interface IUsuarioModel {
+    Cod_Usuario : number;
     Nombre: string ;
     Apellido: string;
     Fecha_Nacimiento: string;
-    Estado_Civil: boolean;
-    Tiene_Hermanos: boolean;
+    Foto: string;
+    Estado_Civil: number;
+    Tiene_Hermanos: number;
 }

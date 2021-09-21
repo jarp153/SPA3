@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder} from '@angular/forms';
-import {FormsModule,ReactiveFormsModule} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { UsuarioModel } from 'src/app/models/usuario-model';
+import { Archivo } from 'src/app/models/archivo-model';
+import { IUsuarioModel } from 'src/app/models/usuario-model';
 import { SpaService } from 'src/app/services/spa.service';
 import { ToolsService } from 'src/app/services/tools.service';
 
@@ -12,56 +12,52 @@ import { ToolsService } from 'src/app/services/tools.service';
   styleUrls: ['./ingresar.component.css']
 })
 export class IngresarComponent implements OnInit {
-  forma: FormGroup;
+  forma!: FormGroup;
   error: boolean = false;
   mensaje: string = '';
 
-  constructor(private router: ActivatedRoute, 
-    private spaS: SpaService, 
-    private fb: FormBuilder, 
-    private routerb: Router, 
-    public tools: ToolsService) { 
+  public archivo: Archivo | undefined;
+  public imagenSubir: File | undefined;
+  public imgTemp: any = null;
 
-      this.tools.asignarNombreOpcion('Ingresar usuario');
+  constructor(
+    private router: ActivatedRoute, 
+    private readonly spaService: SpaService, 
+    private readonly fb: FormBuilder, 
+    private readonly routerb: Router, 
+    public readonly tools: ToolsService) { 
+      this.loadForm();
+  }
 
-      this.forma = this.fb.group({
-        txtNombre : ['', Validators.required],
-        txtApellido : ['', Validators.required],
-        txtFechaNacimiento: ['', Validators.required],
-        txtFoto: ['', Validators.required],
-        drpEstadoCivil: ['', Validators.required],
-        drpTieneHermanos: ['', Validators.required],
-        })
-    }
+  private loadForm():void{
+    this.forma = this.fb.group({
+      Nombre : ['', Validators.required],
+      Apellido : ['', Validators.required],
+      Fecha_Nacimiento: ['', Validators.required],
+      Foto: ['', Validators.required],
+      Estado_Civil: ['', Validators.required],
+      Tiene_Hermanos: ['', Validators.required],
+      })
+  }
 
   ngOnInit(): void {
     this.tools.asignarNombreOpcion('Ingresar usuario')
   }
 
-  ingresar(){
-
+  insertUser(){
     if (this.forma.invalid) {
-      //alert('Debe diligenciar todos los datos');
       this.error=true;
       this.mensaje = 'Debe diligenciar todos los datos...'
       return false;
     }
     else{
-      const data: any = {
-        Nombre: this.forma.value.txtNombre,
-        Apellido: this.forma.value.txtApellido,
-        Fecha_Nacimiento: this.forma.value.txtFechaNacimiento,
-        Foto: this.forma.value.txtFoto,
-        Estado_Civil: this.forma.value.drpEstadoCivil,
-        Tiene_Hermanos: this.forma.value.drpTieneHermanos,
-      };
+      const user = this.forma.value as IUsuarioModel;
 
-      this.spaS.ingresarUsuario(data).subscribe(res=>{
+      this.spaService.insertUser(user).subscribe(res=>{
         alert('Usuario ingresado');
       },
       err=>{
         this.error=true;
-        //alert('Error ingresando datos');
         return false;
       }
       )
@@ -71,9 +67,21 @@ export class IngresarComponent implements OnInit {
     }
   }
 
-  regresar(){
-    this.routerb.navigate(['admin/usuarios']);
+  fileEvent(fileInput: Event){
+    const element = fileInput.currentTarget as HTMLInputElement;
+    let fileList: FileList | null = element.files;
+    
+    if (fileList) {
+      const reader = new FileReader();
+      reader.readAsDataURL( fileList[0] );
+
+      reader.onloadend = () => {
+        this.imgTemp = reader.result;
+      }
+    }
   }
 
-
+  back():void{
+    this.routerb.navigate(['admin/usuarios']);
+  }
 }

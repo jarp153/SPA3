@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
+import { IUsuarioModel } from 'src/app/models/usuario-model';
 import { SpaService } from 'src/app/services/spa.service';
 import { ToolsService } from 'src/app/services/tools.service';
 
@@ -9,29 +10,26 @@ import { ToolsService } from 'src/app/services/tools.service';
   styleUrls: ['./usuarios.component.css']
 })
 export class UsuariosComponent implements OnInit {
-  usuarios: any = [];
+  usuarios: IUsuarioModel[] = [];
   cargando = false;
   error = false;
 
-  constructor(public spaS: SpaService,
-               private fb: FormBuilder, 
+  constructor( private readonly spaService: SpaService,
+               private readonly fb: FormBuilder, 
                public tools: ToolsService) { }
 
   ngOnInit(): void {
     this.tools.asignarNombreOpcion('Usuarios');
-    this.consultar();
-
+    this.getUsers();
   }
 
-  consultar(){
-    this.spaS.consultarUsuarios().subscribe(res=>{
+  getUsers(): void{
+    this.spaService.getUsers().subscribe(res=>{
       this.usuarios = res;
      },
     err =>{
       alert('Error en la comunicacion')
       this.error = true;
     })
-
   }
-
 }

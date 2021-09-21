@@ -4,7 +4,7 @@ import { FormGroup, FormControl, Validators, FormBuilder} from '@angular/forms';
 import {FormsModule,ReactiveFormsModule} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Archivo } from 'src/app/models/archivo-model';
-import { UsuarioModel } from 'src/app/models/usuario-model';
+import { IUsuarioModel } from 'src/app/models/usuario-model';
 import { SpaService } from 'src/app/services/spa.service';
 import { ToolsService } from 'src/app/services/tools.service';
 
@@ -14,8 +14,8 @@ import { ToolsService } from 'src/app/services/tools.service';
   styleUrls: ['./detalle.component.css']
 })
 export class DetalleComponent implements OnInit {
-  forma: FormGroup;
-  usuario: any;
+  forma!: FormGroup;
+  usuario!: IUsuarioModel;
   tiene_hermanos: string = 'NO';
   fecha_nacimiento!: string;
   cod_usuario: number = 0;
@@ -26,47 +26,50 @@ export class DetalleComponent implements OnInit {
   public imagenSubir: File | undefined;
   public imgTemp: any = null;
   
-  constructor(private router: ActivatedRoute, 
-    private spaS: SpaService, 
-    private fb: FormBuilder, 
-    private routerb: Router, 
-    public tools: ToolsService) { 
+  constructor(private readonly router: ActivatedRoute, 
+              private readonly spaService: SpaService, 
+              private readonly fb: FormBuilder, 
+              private readonly routerb: Router, 
+              public tools: ToolsService) { 
 
-      this.tools.asignarNombreOpcion('Detalle usuario')
-      this.forma = this.fb.group({
-        txtNombre : ['', Validators.required],
-        txtApellido : ['', Validators.required],
-        txtFechaNacimiento: [new Date(), Validators.required],
-        txtFoto: ['', Validators.required],
-        drpEstadoCivil: ['', Validators.required],
-        drpTieneHermanos: ['', Validators.required],
-        })
+      this.loadForm();
 
       this.router.params.subscribe(params => {
         this.detalleUsuario(params['id']);
         })
     }
 
+    private loadForm():void{
+      this.forma = this.fb.group({
+        Cod_Usuario : [''],
+        Nombre : ['', Validators.required],
+        Apellido : ['', Validators.required],
+        Fecha_Nacimiento: [new Date(), Validators.required],
+        Foto: [''],
+        Estado_Civil: ['', Validators.required],
+        Tiene_Hermanos: ['', Validators.required],
+        })
+
+    }
     ngOnInit(): void {
     }
 
     detalleUsuario(id: number){
-      this.spaS.consultarDetalleUsuario(id).subscribe( (res:any) => {
+      this.spaService.detailUser(id).subscribe( (res:any) => {
         this.usuario = res;
         this.cod_usuario=res.Cod_Usuario;
         this.tools.asignarNombreOpcion('Detalle usuario ' + this.usuario.Nombre);
-         
-        this.forma.patchValue({
-          txtNombre: this.usuario.Nombre,
-          txtApellido: this.usuario.Apellido,
-          txtFechaNacimiento: this.usuario.Fecha_Nacimiento,
-          txtFoto: this.usuario.Foto,
-          drpEstadoCivil: 1, //this.usuario.Estado_Civil,
-          drpTieneHermanos: this.usuario.Tiene_Hermanos,
-        })
 
-        this.forma.controls.drpTieneHermanos.setValue(1);
-      })
+        this.forma.patchValue({
+          Cod_Usuario: this.usuario.Cod_Usuario,
+          Nombre: this.usuario.Nombre,
+          Apellido: this.usuario.Apellido,
+          Fecha_Nacimiento: this.usuario.Fecha_Nacimiento,
+          Foto: this.usuario.Foto,
+          Estado_Civil: this.usuario.Estado_Civil,
+          Tiene_Hermanos: this.usuario.Tiene_Hermanos,
+        }) 
+     })
     }
 
    actualizar(){
@@ -77,26 +80,17 @@ export class DetalleComponent implements OnInit {
       return false;
     }
     else{
-      const data: any = {
-        Cod_Usuario: this.cod_usuario,
-        Nombre: this.forma.value.txtNombre,
-        Apellido: this.forma.value.txtApellido,
-        Fecha_Nacimiento: this.forma.value.txtFechaNacimiento,
-        Foto: this.forma.value.txtFoto,
-        Estado_Civil: this.forma.value.drpEstadoCivil,
-        Tiene_Hermanos: this.forma.value.drpTieneHermanos,
-      };
-
-      this.spaS.actualizarUsuario(data).subscribe(res=>{
+      const user = this.forma.value as IUsuarioModel;
+      
+      this.spaService.updateUser(user).subscribe(res=>{
         console.log(res);
       },
       err=>{
         alert('Error ingresando datos');
       }
       )
-      this.routerb.navigate(['admin/usuarios']);
-      return true;
-      
+        this.routerb.navigate(['admin/usuarios']);
+        return true;
     }
   }
 
@@ -115,13 +109,13 @@ export class DetalleComponent implements OnInit {
   }
 
   subirArchivo(archivo: Archivo){
-    this.spaS.subirArchivo(this.archivo).subscribe(res=>{
+    this.spaService.subirArchivo(this.archivo).subscribe(res=>{
       console.log('archivo')
     })
   }
 
-  regresar(){
-    this.routerb.navigate(['admin/usuarios']);
+  regresar(): void{
+    this.routerb.navigate(['admin/ingresar']);
   }
 
 }

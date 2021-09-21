@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { UsuarioModel } from '../models/usuario-model';
+import { IUsuarioModel } from '../models/usuario-model';
 
 @Injectable({
   providedIn: 'root'
@@ -12,20 +12,20 @@ export class SpaService {
 
   constructor(private http: HttpClient) { }
 
-  consultarUsuarios(): Observable<UsuarioModel[]>{
-    return this.http.get<UsuarioModel[]>(`${ this.url }/ConsultarUsuarios`)
+  getUsers(): Observable<IUsuarioModel[]>{
+    return this.http.get<IUsuarioModel[]>(`${ this.url }/ConsultarUsuarios`)
   }
 
-  consultarDetalleUsuario(id: number){
-    return this.http.get<any[]>(`${ this.url }/ConsultarUsuario/${ id }`)
+  detailUser(id: number){
+    return this.http.get<IUsuarioModel>(`${ this.url }/ConsultarUsuario/${ id }`)
   }
 
-  ingresarUsuario(data: any){
-    return this.http.post<any[]>(`${ this.url }/IngresarUsuario/`, data)
+  insertUser(user: IUsuarioModel): Observable<IUsuarioModel>{
+    return this.http.post<IUsuarioModel>(`${ this.url }/IngresarUsuario/`, user)
   }
 
-  actualizarUsuario(data: any){
-    return this.http.put<any[]>(`${ this.url }/ActualizarUsuario/`, data)
+  updateUser(user: IUsuarioModel){
+    return this.http.put<IUsuarioModel>(`${ this.url }/ActualizarUsuario/`, user)
   }
 
   subirArchivo(File: any): Observable<any>{

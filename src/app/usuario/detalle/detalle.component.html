@@ -6,35 +6,29 @@
                 <div class="form-group">
                     <div class="col-sm-6">
                         <mat-form-field class="full-width">
-                            <input matInput formControlName="txtNombre" id="txtNombre" placeholder="Nombre:">
+                            <input type="hidden" formControlName="Cod_Usuario">
+                            <input matInput formControlName="Nombre" id="Nombre" placeholder="Nombre:">
                         </mat-form-field>
-                        <small *ngIf="forma.controls['txtNombre'].invalid && forma.controls['txtNombre'].touched" class="text-danger"><b>Ingrese nombre!!</b></small>
+                        <small *ngIf="forma.controls['Nombre'].invalid && forma.controls['Nombre'].touched" class="text-danger"><b>Ingrese nombre!!</b></small>
                     </div>
                     <div class="col-sm-6">
                         <mat-form-field class="full-width">
-                            <input matInput formControlName="txtApellido" id="txtApellido" placeholder="Apellido:">
+                            <input matInput formControlName="Apellido" id="Apellido" placeholder="Apellido:">
                         </mat-form-field>
-                        <small *ngIf="forma.controls['txtApellido'].invalid && forma.controls['txtApellido'].touched" class="text-danger"><b>Ingrese apellido!!</b></small>
+                        <small *ngIf="forma.controls['Apellido'].invalid && forma.controls['Apellido'].touched" class="text-danger"><b>Ingrese apellido!!</b></small>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-sm-6">
                         <mat-form-field class="full-width">
-                            <input matInput formControlName="txtFechaNacimiento" id="txtFechaNacimiento" placeholder="Fecha nacimiento:">
+                            <input matInput formControlName="Fecha_Nacimiento" id="Fecha_Nacimiento" placeholder="Fecha nacimiento:">
                         </mat-form-field>
-                        <!-- <mat-form-field appearance="fill">
-                            <mat-label>Fecha de nacimiento</mat-label>
-                            <input matInput [matDatepicker]="picker" formControlName="txtFechaNacimiento" id="txtFechaNacimiento">
-                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                            <mat-datepicker #picker></mat-datepicker>
-                          </mat-form-field> -->
-
                     </div>
                     <div class="col-sm-4">
                         <mat-form-field class="full-width">
-                            <input matInput formControlName="txtFoto" id="txtFoto" placeholder="Foto:">
+                            <input matInput formControlName="Foto" id="Foto" placeholder="Foto:">
                         </mat-form-field>
-                        <input type="file" formControlName="txtFoto" id="txtFoto" (change)="fileEvent($event)">
+                        <input type="file" formControlName="Foto" id="Foto" (change)="fileEvent($event)">
                         <!-- <input type="button" value="Cargar" (click)="subirArchivo()"> -->
                     </div>
 
@@ -47,7 +41,7 @@
                     <div class="col-sm-6">
                         <mat-form-field appearance="fill" style="width: 100%;"> 
                             <mat-label>Estado civil</mat-label>
-                            <select matNativeControl required style=" font-size: 30px;" id="drpEstadoCivil" formControlName="drpEstadoCivil">
+                            <select matNativeControl required style=" font-size: 30px;" id="Estado_Civil" formControlName="Estado_Civil">
                               <option value="0">SOLTERO</option>
                               <option value="1">CASADO</option>
                             </select>
@@ -56,7 +50,7 @@
                     <div class="col-sm-6">
                         <mat-form-field appearance="fill" style="width: 100%;"> 
                             <mat-label>Tiene Hermanos</mat-label>
-                            <select matNativeControl required style=" font-size: 30px;" id="drpTieneHermanos" formControlName="drpTieneHermanos">
+                            <select matNativeControl required style=" font-size: 30px;" id="Tiene_Hermanos" formControlName="Tiene_Hermanos">
                               <option value="1">SI</option>
                               <option value="0">NO</option>
                             </select>

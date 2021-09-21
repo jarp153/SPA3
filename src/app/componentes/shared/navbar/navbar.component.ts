@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from 'src/app/services/auth.service';
 import { ToolsService } from 'src/app/services/tools.service';
 
 @Component({
@@ -9,7 +8,7 @@ import { ToolsService } from 'src/app/services/tools.service';
 })
 export class NavbarComponent implements OnInit {
   
-  constructor(public tools: ToolsService, public auth: AuthService) { 
+  constructor(public tools: ToolsService) { 
   }
   ngOnInit(): void {
    
