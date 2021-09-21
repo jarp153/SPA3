@@ -22,7 +22,7 @@
                                 <td width="10%">Tiene hermanos</td>
                             </tr>
                             <tr style="font-size:11px" align="center" *ngFor="let u of usuarios; let i = index">
-                                <td><a [routerLink]="'../detalle/' + u.Cod_Usuario">{{ u.Nombre }} {{ u.Apellido }}</a></td>
+                                <td><a [routerLink]="'detalle/' + u.Cod_Usuario">{{ u.Nombre }} {{ u.Apellido }}</a></td>
                                 <td>{{ u.Fecha_Nacimiento}}</td>
                                 <td>{{ u.Foto }}</td>
                                 <td><div *ngIf="u.Estado_Civil==1">CASADO</div><div *ngIf="u.Estado_Civil!=1">SOLTERO</div></td>
